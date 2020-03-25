@@ -1,13 +1,28 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import { Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query } from '@nestjs/common';
 import { RestDto } from './rest-dto';
 import {RestDTOSinId} from './rest-dtosin-id';
+import {ListAllEntities} from './list-all-entities';
+import { ListResponse } from './list-response';
 
 @Controller('rest')
 export class RestController {
   @Get() // listado
-  findAll(): RestDto[] {
+  findAll(@Query() query: ListAllEntities): ListResponse {
     // buscar los datos en la BBDD
-    return [];
+    const  response = new ListResponse();
+    response.data = [];
+    response.pagination = query;
+    response.pagination.numElements = 200;
+    response.status = 'OK';
+    response.message = 'Correct Query';
+    return response;
   }
   @Post() // añadir un objeto
   addOne(@Body() createDto: RestDTOSinId): RestDto {
