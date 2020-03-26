@@ -1,12 +1,19 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { RestDto } from './rest-dto';
+import { RestDto } from '../interfaces/rest-dto';
+import {RestDTOSinId} from '../interfaces/rest-dtosin-id';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class RestService {
   private readonly logger = new Logger(RestService.name);
   private listado: RestDto[];
-  constructor() {
+  constructor(@InjectModel('Persona')
+                private readonly modelo: Model<RestDTOSinId>) {
     this.listado = [];
+  }
+  async findAll(): Promise<RestDTOSinId[]> {
+    return await this.modelo.find().exec();
   }
   getListado() {
     return this.listado;

@@ -1,10 +1,8 @@
-import { IsInt } from 'class-validator';
+import { IsInt, IsString } from 'class-validator';
 // Uso de la biblioteca https://github.com/typestack/class-validator
 export class ListAllEntities {
-  @IsInt()
+  @IsString()
   readonly limit: number;
-  @IsInt()
+  @IsString()
   readonly page: number;
-  @IsInt()
-  numElements: number;
 }

@@ -6,9 +6,13 @@ import { PatronesController } from './patrones/patrones.controller';
 import { ParamsController } from './params/params.controller';
 import { PayloadController } from './payload/payload.controller';
 import { ApiModule } from './api/api.module';
+import {MongooseModule} from '@nestjs/mongoose';
 
 @Module({
-  imports: [ApiModule],
+  imports: [
+    ApiModule,
+    MongooseModule.forRoot('mongodb://localhost/test',
+    { useNewUrlParser: true, useUnifiedTopology: true })],
   controllers: [AppController,
     RutasController,
     PatronesController,
