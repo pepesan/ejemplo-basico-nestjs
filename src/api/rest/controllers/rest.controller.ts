@@ -3,7 +3,7 @@ import {
   Controller,
   Delete,
   Get, HttpStatus,
-  Param,
+  Param, Patch,
   Post,
   Put,
   Query, Res,
@@ -75,6 +75,12 @@ export class RestController {
     response.message = 'Correct Query';
     return response;
   }
+  @Post()
+  async create(@Body() restDto: RestDTOSinId): Promise<RestDto> {
+    const restDtoAgnadido = await this.restService.create(restDto);
+    return restDtoAgnadido;
+  }
+  /*
   @Post() // añadir un objeto
   @ApiBody({ type: [RestDTOSinId] })
   @ApiResponse({
@@ -96,6 +102,12 @@ export class RestController {
     res.message = 'Object saved!';
     return res;
   }
+  */
+  @Get(':id')
+  findOne(@Param('id') id: string): Promise<RestDto> {
+    return this.restService.findById(id);
+  }
+  /*
   @Get('/:id') // mostrar
   getById(@Param('id') id: number): ObjectResponse {
     // Capturar e id y consultar a la BBDD
@@ -103,13 +115,27 @@ export class RestController {
     restDTO.id = params.id;
     restDTO.name = 'Pepe';
     restDTO.age = 14;
-     */
+
     const res = new ObjectResponse();
     res.data = this.restService.getElementById(id);
     res.status = 'OK';
     res.message = 'Correct ID!';
     return res;
   }
+   */
+  @Put(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() restDTOSinId: RestDTOSinId): Promise<RestDto> {
+    return this.restService.updateById(id, restDTOSinId);
+  }
+  @Patch(':id')
+  async parchea(
+    @Param('id') id: string,
+    @Body() restDTOSinId: RestDTOSinId): Promise<RestDto> {
+    return this.restService.patchById(id, restDTOSinId);
+  }
+  /*
   @Put('/:id') // modificar un objeto
   modifyById(@Param() params,
              @Body() updateDto: RestDTOSinId): ObjectResponse {
@@ -124,6 +150,12 @@ export class RestController {
     res.message = 'Correct ID!';
     return res;
   }
+   */
+  @Delete(':id')
+  remove(@Param('id') id: string): Promise<RestDto> {
+    return this.restService.delete(id);
+  }
+  /*
   @Delete('/:id') // borrar
   deleteById(@Param() params): ObjectResponse {
     // coger el id consultar a la bbdd y luego borrar el objeto
@@ -137,4 +169,5 @@ export class RestController {
     res.message = 'Correct ID!';
     return res;
   }
+   */
 }

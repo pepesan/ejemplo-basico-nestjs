@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Libro } from './libro';
 import { Model } from 'mongoose';
-import { RestDto } from '../rest/interfaces/rest-dto';
 @Injectable()
 export class LibrosService {
   constructor(@InjectModel('Libro')
