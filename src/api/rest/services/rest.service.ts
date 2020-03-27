@@ -10,8 +10,12 @@ export class RestService {
   private readonly logger = new Logger(RestService.name);
   private listado: RestDto[];
   constructor(@InjectModel('Persona')
-                private readonly modelo: Model<RestDTOSinId>) {
+                private readonly modelo: Model<RestDto>) {
     this.listado = [];
+  }
+  async findAllSimple(): Promise<RestDto[]> {
+    // this.logger.log('query: limit :' + query.limit + ' page: ' + query.page);
+    return this.modelo.find().exec();
   }
   async findAllAsync(query: ListAllEntities): Promise<RestDto[]> {
     this.logger.log('query: limit :' + query.limit + ' page: ' + query.page);

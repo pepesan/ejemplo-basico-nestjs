@@ -14,6 +14,7 @@ import {ListAllEntities} from '../interfaces/list-all-entities';
 import { ListResponse } from '../interfaces/list-response';
 import { RestService } from '../services/rest.service';
 import { ObjectResponse } from '../interfaces/object-response';
+import { ApiBody, ApiResponse } from '@nestjs/swagger';
 
 @Controller('rest')
 export class RestController {
@@ -24,6 +25,14 @@ export class RestController {
   }
   /*
   @Get() // listado
+  @ApiResponse({
+    status: 200,
+    description: 'Correct Query',
+    type: ListResponse})
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden.',
+    type: ListResponse})
   findAll(@Res() res, @Query() query: ListAllEntities) {
     const response: ListResponse = new ListResponse();
     this.restService.findAll(query).then( data => {
@@ -40,6 +49,20 @@ export class RestController {
   }
    */
   @Get()
+  async findAll(): Promise<RestDto[]> {
+    // buscar los datos en la BBDD
+    return this.restService.findAllSimple();
+  }
+  /*
+  @Get()
+  @ApiResponse({
+    status: 200,
+    description: 'Correct Query',
+    type: ListResponse})
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden.',
+    type: ListResponse})
   async findAll(@Query() query: ListAllEntities): Promise<ListResponse> {
     // buscar los datos en la BBDD
     const  response = new ListResponse();
@@ -49,7 +72,14 @@ export class RestController {
     response.message = 'Correct Query';
     return response;
   }
+   */
   @Post() // añadir un objeto
+  @ApiBody({ type: [RestDTOSinId] })
+  @ApiResponse({
+    status: 200,
+    description: 'The record has been successfully created.',
+    type: ObjectResponse})
+  @ApiResponse({ status: 403, description: 'Forbidden.'})
   addOne(@Body() createDto: RestDTOSinId): ObjectResponse {
     // recoger el objeto y meterlo en la BBDD
     const restDTO = new RestDto();
