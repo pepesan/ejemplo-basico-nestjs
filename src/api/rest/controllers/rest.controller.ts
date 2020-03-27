@@ -1,11 +1,13 @@
-import { Body,
+import {
+  Body,
   Controller,
   Delete,
-  Get,
+  Get, HttpStatus,
   Param,
   Post,
   Put,
-  Query } from '@nestjs/common';
+  Query, Res,
+} from '@nestjs/common';
 import { RestDto } from '../interfaces/rest-dto';
 import {RestDTOSinId} from '../interfaces/rest-dtosin-id';
 import {ListAllEntities} from '../interfaces/list-all-entities';
@@ -15,25 +17,38 @@ import { ObjectResponse } from '../interfaces/object-response';
 
 @Controller('rest')
 export class RestController {
+  private listado: RestDto[];
   private idActual: number = 0;
   constructor(private restService: RestService) {
-  }
-  @Get() // listado
-  async findAll(): Promise<RestDTOSinId[]> {
-    return this.restService.findAll();
+    this.listado = [];
   }
   /*
-  findAll(@Query() query: ListAllEntities): ListResponse {
+  @Get() // listado
+  findAll(@Res() res, @Query() query: ListAllEntities) {
+    const response: ListResponse = new ListResponse();
+    this.restService.findAll(query).then( data => {
+      response.data = data;
+      response.status = 'OK';
+      response.message = 'List loaded';
+      return res.status(HttpStatus.OK).json(response);
+    }).catch(error => {
+      response.data = [];
+      response.status = 'Fail';
+      response.message = 'DB Fail';
+      return res.status(HttpStatus.OK).json(response);
+    });
+  }
+   */
+  @Get()
+  async findAll(@Query() query: ListAllEntities): Promise<ListResponse> {
     // buscar los datos en la BBDD
     const  response = new ListResponse();
-    response.data = this.restService.findAll();
+    response.data = await this.restService.findAllAsync(query);
     response.pagination = query;
     response.status = 'OK';
     response.message = 'Correct Query';
     return response;
   }
-
-   */
   @Post() // añadir un objeto
   addOne(@Body() createDto: RestDTOSinId): ObjectResponse {
     // recoger el objeto y meterlo en la BBDD

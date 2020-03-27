@@ -3,6 +3,7 @@ import { RestDto } from '../interfaces/rest-dto';
 import {RestDTOSinId} from '../interfaces/rest-dtosin-id';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { ListAllEntities } from '../interfaces/list-all-entities';
 
 @Injectable()
 export class RestService {
@@ -12,8 +13,23 @@ export class RestService {
                 private readonly modelo: Model<RestDTOSinId>) {
     this.listado = [];
   }
-  async findAll(): Promise<RestDTOSinId[]> {
-    return await this.modelo.find().exec();
+  async findAllAsync(query: ListAllEntities): Promise<RestDto[]> {
+    this.logger.log('query: limit :' + query.limit + ' page: ' + query.page);
+    const promesa = this.modelo.find(
+      {},
+      'name age')
+      .limit(+query.limit)
+      .skip((+query.limit) * (+query.page)).exec();
+    return promesa;
+  }
+  findAll(query: ListAllEntities): Promise<RestDto[]> {
+    this.logger.log('query: limit :' + query.limit + ' page: ' + query.page);
+    const promesa = this.modelo.find(
+      {},
+      'name age')
+      .limit(+query.limit)
+      .skip((+query.limit) * (+query.page)).exec();
+    return promesa;
   }
   getListado() {
     return this.listado;
