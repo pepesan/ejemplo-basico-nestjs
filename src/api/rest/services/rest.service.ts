@@ -15,7 +15,9 @@ export class RestService {
   }
   async findAllSimple(): Promise<RestDto[]> {
     // this.logger.log('query: limit :' + query.limit + ' page: ' + query.page);
-    return this.modelo.find().exec();
+    const promesa = this.modelo.find().exec();
+    this.logger.log(promesa);
+    return promesa;
   }
   async findAllAsync(query: ListAllEntities): Promise<RestDto[]> {
     this.logger.log('query: limit :' + query.limit + ' page: ' + query.page);

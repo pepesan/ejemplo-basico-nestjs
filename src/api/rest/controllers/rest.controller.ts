@@ -35,7 +35,9 @@ export class RestController {
     type: ListResponse})
   findAll(@Res() res, @Query() query: ListAllEntities) {
     const response: ListResponse = new ListResponse();
-    this.restService.findAll(query).then( data => {
+    this.restService.findAll(query)
+      // caso de que todo salga guay devuelve data = Restdto[]
+      .then(data => {
       response.data = data;
       response.status = 'OK';
       response.message = 'List loaded';
@@ -43,17 +45,18 @@ export class RestController {
     }).catch(error => {
       response.data = [];
       response.status = 'Fail';
-      response.message = 'DB Fail';
+      response.message = error;
       return res.status(HttpStatus.OK).json(response);
     });
   }
    */
+  /*
   @Get()
   async findAll(): Promise<RestDto[]> {
     // buscar los datos en la BBDD
     return this.restService.findAllSimple();
   }
-  /*
+   */
   @Get()
   @ApiResponse({
     status: 200,
@@ -72,7 +75,6 @@ export class RestController {
     response.message = 'Correct Query';
     return response;
   }
-   */
   @Post() // añadir un objeto
   @ApiBody({ type: [RestDTOSinId] })
   @ApiResponse({
